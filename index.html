@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TuPlanFacil | Cotiza y mejora tu plan de salud</title>
+    <meta
+      name="description"
+      content="Asesoria personalizada en Chile para cotizar, comparar, revisar o mejorar tu plan de salud o Isapre. Orientacion clara con mirada profesional y humana."
+    />
+    <meta name="theme-color" content="#0B3A75" />
+    <link rel="canonical" href="https://tuplanf4cil.cl/" />
+
+    <meta property="og:title" content="TuPlanFacil | Tu plan de salud, mas facil" />
+    <meta
+      property="og:description"
+      content="Asesoria personalizada para revisar tu situacion actual, comparar alternativas y entender coberturas con criterio profesional y humano."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tuplanf4cil.cl/" />
+    <meta property="og:image" content="https://tuplanf4cil.cl/assets/images/tiburon-variantes-alt.png" />
+
+    <link rel="icon" type="image/png" href="assets/images/tiburon-cta.png" />
+    <link rel="preload" as="image" href="assets/images/tiburon-variantes-alt.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Google Analytics: pega aqui el script oficial de GA4 cuando tengas el ID de medicion. -->
+    <!-- Meta Pixel: pega aqui el codigo oficial de Meta cuando tengas el pixel. -->
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "TuPlanFacil",
+        "url": "https://tuplanf4cil.cl/",
+        "areaServed": "Chile",
+        "description": "Asesoria personalizada para cotizar, comparar y revisar planes de salud e Isapre en Chile.",
+        "serviceType": "Asesoria comercial en planes de salud"
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#leadForm">Ir al formulario de cotizacion</a>
+
+    <header class="site-header" data-header>
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="assets/images/tiburon-cta.png" alt="" width="52" height="52" />
+        </span>
+        <span>
+          <strong>TuPlanFacil</strong>
+          <small>Tu plan de salud, mas facil.</small>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" data-nav-toggle>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" aria-label="Navegacion principal" data-nav>
+        <a href="#inicio">Inicio</a>
+        <a href="#asesoria">Beneficios</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#faq">Preguntas frecuentes</a>
+        <a href="#leadForm">Cotizar</a>
+      </nav>
+
+      <a class="header-cta" data-whatsapp-link href="https://wa.me/56942544093?text=Hola%2C%20quiero%20cotizar%20o%20mejorar%20mi%20plan%20de%20salud">
+        Hablar por WhatsApp
+      </a>
+    </header>
+
+    <main id="inicio">
+      <section class="hero section-pad" aria-labelledby="hero-title">
+        <div class="container hero-grid">
+          <form class="lead-form hero-form reveal" id="leadForm" novalidate>
+            <!-- Para conectar luego: reemplaza el manejo de script.js por Formspree, Google Sheets, backend, CRM o email. -->
+            <div class="form-head form-wide">
+              <p class="eyebrow">Cotiza en 1 minuto</p>
+              <p class="form-title">Deja tus datos y revisamos tu caso</p>
+              <p>Te contacto por WhatsApp para orientarte segun tu situacion actual.</p>
+            </div>
+
+            <div class="form-row form-col">
+              <label for="nombre">Nombre completo <span>*</span></label>
+              <input id="nombre" name="nombre" type="text" autocomplete="name" required />
+              <small class="field-error" data-error-for="nombre"></small>
+            </div>
+
+            <div class="form-row form-col">
+              <label for="telefono">Telefono <span>*</span></label>
+              <input id="telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" required />
+              <small class="field-error" data-error-for="telefono"></small>
+            </div>
+
+            <div class="form-row form-col">
+              <label for="email">Correo electronico <span>*</span></label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+              <small class="field-error" data-error-for="email"></small>
+            </div>
+
+            <div class="form-row form-col">
+              <label for="edad">Edad</label>
+              <input id="edad" name="edad" type="number" min="18" max="100" inputmode="numeric" />
+            </div>
+
+            <div class="form-row form-col">
+              <label for="sistema">Sistema actual <span>*</span></label>
+              <select id="sistema" name="sistema" required>
+                <option value="">Selecciona</option>
+                <option>Fonasa</option>
+                <option>Isapre</option>
+                <option>No se</option>
+              </select>
+              <small class="field-error" data-error-for="sistema"></small>
+            </div>
+
+            <div class="form-row form-col">
+              <label for="isapreActual">Isapre actual, si corresponde</label>
+              <select id="isapreActual" name="isapreActual">
+                <option value="">Selecciona una opcion</option>
+                <option>No tengo Isapre</option>
+                <option>No se</option>
+                <option>Banmedica</option>
+                <option>Colmena Golden Cross</option>
+                <option>Consalud</option>
+                <option>Cruz Blanca</option>
+                <option>Nueva Masvida</option>
+                <option>Vida Tres</option>
+                <option>Esencial</option>
+                <option>Isalud - Codelco</option>
+                <option>Cruz del Norte</option>
+                <option>Fundacion BancoEstado</option>
+              </select>
+            </div>
+
+            <div class="form-row form-col">
+              <label for="region">Region</label>
+              <select id="region" name="region">
+                <option value="">Selecciona una region</option>
+                <option>Arica y Parinacota</option>
+                <option>Tarapaca</option>
+                <option>Antofagasta</option>
+                <option>Atacama</option>
+                <option>Coquimbo</option>
+                <option>Valparaiso</option>
+                <option>Metropolitana de Santiago</option>
+                <option>Libertador General Bernardo O'Higgins</option>
+                <option>Maule</option>
+                <option>Nuble</option>
+                <option>Biobio</option>
+                <option>La Araucania</option>
+                <option>Los Rios</option>
+                <option>Los Lagos</option>
+                <option>Aysen del General Carlos Ibanez del Campo</option>
+                <option>Magallanes y de la Antartica Chilena</option>
+              </select>
+            </div>
+
+            <div class="form-row form-col">
+              <label for="renta">Renta aproximada</label>
+              <input id="renta" name="renta" type="text" inputmode="numeric" placeholder="$1.200.000" />
+            </div>
+
+            <div class="form-row form-col">
+              <label for="cargas">Numero de cargas</label>
+              <select id="cargas" name="cargas">
+                <option value="">Selecciona una opcion</option>
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>Mas de 3</option>
+              </select>
+            </div>
+
+            <div class="form-row form-col">
+              <label for="afp">¿Quieres asesoria previsional AFP?</label>
+              <select id="afp" name="afp">
+                <option value="">Selecciona una opcion</option>
+                <option>Si, quiero revisar mi AFP</option>
+                <option>No por ahora</option>
+                <option>Quiero que me expliquen</option>
+              </select>
+            </div>
+
+            <div class="form-row form-wide">
+              <label for="comentario">Comentarios</label>
+              <textarea id="comentario" name="comentario" rows="2" placeholder="Cuentame que quieres revisar. Si tienes mas de 3 beneficiarios, anota aca sus edades."></textarea>
+            </div>
+
+            <button class="btn btn-primary submit-btn form-submit-wide" type="submit">Enviar solicitud</button>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite">
+              La informacion ingresada sera utilizada unicamente para fines de contacto y asesoria personalizada.
+            </p>
+          </form>
+
+          <div class="hero-authority" id="asesoria">
+            <div class="hero-copy reveal">
+              <p class="eyebrow">Asesoria creada por profesionales de la salud</p>
+              <h1 id="hero-title">No dejes tu cobertura de salud en manos de cualquiera</h1>
+              <p class="hero-lead">
+                En TuPlanFacil unimos experiencia clinica y conocimiento practico del sistema de Isapres para ayudarte a
+                tomar una mejor decision. Sabemos lo que puede significar una mala cobertura, una asesoria incompleta o
+                elegir sin entender bien las condiciones.
+              </p>
+              <p class="hero-support">
+                Revisamos tu caso con criterio profesional y foco en que entiendas tus opciones antes de decidir.
+              </p>
+
+              <div class="hero-actions">
+                <a class="btn btn-primary" data-whatsapp-link href="https://wa.me/56942544093?text=Hola%2C%20quiero%20cotizar%20o%20mejorar%20mi%20plan%20de%20salud">
+                  Revisar mi caso por WhatsApp
+                </a>
+                <a class="btn btn-secondary" href="#leadForm">Dejar mis datos</a>
+              </div>
+            </div>
+
+            <aside class="about-mini reveal" aria-labelledby="about-title">
+              <div>
+                <p class="eyebrow">Quienes somos</p>
+                <h2 id="about-title">Una asesoria de salud con mirada profesional</h2>
+                <p>
+                  Somos un grupo de profesionales de la salud que decidio crear TuPlanFacil para orientar a personas,
+                  familias y trabajadores con informacion clara, responsable y humana.
+                </p>
+                <p>
+                  Conocemos desde dentro la incertidumbre que genera una mala cobertura o una asesoria incompleta. Por eso
+                  revisamos cada caso considerando salud, presupuesto, cargas, sistema actual y necesidades reales.
+                </p>
+              </div>
+              <img
+                src="assets/images/tuplanfacil-mejora-plan-salud.png"
+                alt="Ilustracion de TuPlanFacil explicando como mejorar un plan de salud con asesoria personalizada"
+                width="1536"
+                height="1024"
+                onerror="this.onerror=null; this.src='assets/images/tiburon-variantes-alt.png';"
+              />
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-pad solution" aria-labelledby="solucion-title">
+        <div class="container split">
+          <div class="section-heading align-left reveal">
+            <p class="eyebrow">La solucion</p>
+            <h2 id="solucion-title">Te ayudo a entender, comparar y mejorar tu plan</h2>
+            <p>
+              En TuPlanFacil revisamos tu situacion actual, tus necesidades de salud, tu renta, tus cargas y tus
+              preferencias de atencion para orientarte con alternativas reales y faciles de entender.
+            </p>
+            <a class="btn btn-primary" href="#leadForm">Cotizar ahora</a>
+          </div>
+
+          <div class="check-panel reveal">
+            <ul class="check-list">
+              <li>Revision de tu plan actual.</li>
+              <li>Comparacion de alternativas.</li>
+              <li>Asesoria segun tu situacion familiar y laboral.</li>
+              <li>Explicacion clara de beneficios y coberturas.</li>
+              <li>Acompanamiento en el proceso.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-pad corporate" id="corporate" aria-labelledby="corporate-title">
+        <div class="container corporate-box reveal">
+          <div>
+            <p class="eyebrow">Empresas y trabajadores</p>
+            <h2 id="corporate-title">Planes Corporate para trabajadores y empresas</h2>
+            <p>
+              Si eres trabajador o colaborador de una empresa, podrias acceder a alternativas con condiciones
+              preferentes. Los planes Corporate estan pensados para empresas y sus colaboradores, permitiendo evaluar
+              mejores coberturas y valores mas convenientes segun el caso.
+            </p>
+            <p class="strong-note">
+              Tambien podemos revisar oportunidades para grupos de trabajadores o convenios empresa.
+            </p>
+          </div>
+          <a class="btn btn-light" data-whatsapp-link href="https://wa.me/56942544093?text=Hola%2C%20quiero%20consultar%20por%20plan%20Corporate">
+            Consultar por plan Corporate
+          </a>
+        </div>
+      </section>
+
+      <section class="section-pad previsional" aria-labelledby="previsional-title">
+        <div class="container split">
+          <div class="section-heading align-left reveal">
+            <p class="eyebrow">Asesoria previsional</p>
+            <h2 id="previsional-title">Por que tambien podemos orientarte sobre tu AFP</h2>
+            <p>
+              La salud y la prevision estan conectadas con decisiones financieras importantes: renta imponible, etapa
+              laboral, estabilidad familiar, ahorro obligatorio y proyeccion futura. Por eso, si lo necesitas, tambien
+              podemos tomar tus datos para una orientacion previsional inicial.
+            </p>
+          </div>
+
+          <div class="previsional-card reveal">
+            <h3>Que revisamos en una orientacion inicial</h3>
+            <ul class="check-list">
+              <li>Tu AFP actual y dudas principales.</li>
+              <li>Comisiones, multifondos y conceptos clave.</li>
+              <li>Contexto laboral y objetivos de ahorro.</li>
+              <li>Opciones para recibir una explicacion clara antes de decidir.</li>
+            </ul>
+            <p>
+              La idea es ayudarte a entender mejor tu situacion, sin prometer rentabilidades ni resultados garantizados.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-pad process" id="como-funciona" aria-labelledby="proceso-title">
+        <div class="container">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Paso a paso</p>
+            <h2 id="proceso-title">Cotizar es facil</h2>
+            <p>Un proceso corto, claro y pensado para que no tengas que interpretar todo solo.</p>
+          </div>
+
+          <div class="steps">
+            <article class="step-card reveal">
+              <span>1</span>
+              <h3>Completa tus datos</h3>
+              <p>Dejanos tu informacion basica para entender tu situacion actual.</p>
+            </article>
+            <article class="step-card reveal">
+              <span>2</span>
+              <h3>Revisamos tu caso</h3>
+              <p>Analizamos tu sistema actual, renta, cargas y necesidades de cobertura.</p>
+            </article>
+            <article class="step-card reveal">
+              <span>3</span>
+              <h3>Te contactamos con alternativas</h3>
+              <p>Te explicamos las opciones de forma clara para que puedas decidir mejor.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-pad expert-cta" aria-labelledby="expert-cta-title">
+        <div class="container expert-cta-box reveal">
+          <div>
+            <p class="eyebrow">Decision informada</p>
+            <h2 id="expert-cta-title">Tu no necesitas solo un comparador. Necesitas asesoria entregada por profesionales de la salud.</h2>
+            <p>
+              Un comparador puede mostrarte precios, pero no siempre interpreta tu realidad: edad, cargas, renta,
+              sistema actual, uso de clinicas, necesidades familiares y riesgos de quedar con una cobertura que no
+              calza con tu vida. En TuPlanFacil revisamos tu caso con experiencia real en salud y conocimiento practico
+              del sistema, para que entiendas que estas contratando antes de tomar una decision.
+            </p>
+          </div>
+          <a class="btn btn-light" href="#leadForm">Quiero asesoria profesional</a>
+        </div>
+      </section>
+
+      <section class="section-pad faq" id="faq" aria-labelledby="faq-title">
+        <div class="container narrow">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Preguntas frecuentes</p>
+            <h2 id="faq-title">Respuestas rapidas antes de cotizar</h2>
+          </div>
+
+          <div class="faq-list" data-faq-list>
+            <details class="faq-item reveal">
+              <summary>¿La asesoria tiene costo?</summary>
+              <p>La primera orientacion es sin compromiso. Revisamos tu caso y te explicamos las alternativas disponibles.</p>
+            </details>
+            <details class="faq-item reveal">
+              <summary>¿Puedo cotizar si estoy en Fonasa?</summary>
+              <p>Si. Podemos revisar si existe una alternativa de Isapre que se ajuste a tu renta, edad y necesidades de salud.</p>
+            </details>
+            <details class="faq-item reveal">
+              <summary>¿Puedo mejorar mi plan actual?</summary>
+              <p>Si. Si ya tienes Isapre, podemos revisar tu plan actual y evaluar si existen mejores opciones segun tu situacion.</p>
+            </details>
+            <details class="faq-item reveal">
+              <summary>¿Que necesito para cotizar?</summary>
+              <p>Necesitamos datos basicos como edad, renta aproximada, sistema actual, region, cargas y comentarios principales.</p>
+            </details>
+            <details class="faq-item reveal">
+              <summary>¿Puedo incluir cargas?</summary>
+              <p>Si. Podemos considerar tus cargas familiares para buscar una alternativa adecuada.</p>
+            </details>
+            <details class="faq-item reveal">
+              <summary>¿Que es un plan Corporate?</summary>
+              <p>Es una alternativa pensada para empresas o grupos de trabajadores, que puede tener condiciones preferentes segun el convenio o caso.</p>
+            </details>
+            <details class="faq-item reveal">
+              <summary>¿Tengo que cambiarme obligatoriamente?</summary>
+              <p>No. La idea es orientarte. Tu decides si te conviene mantener, mejorar o cambiar tu plan.</p>
+            </details>
+            <details class="faq-item reveal">
+              <summary>¿Me ayudan si mi Isapre subio el precio?</summary>
+              <p>Si. Podemos revisar tu situacion y evaluar alternativas disponibles.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <strong class="footer-brand">TuPlanFacil</strong>
+          <p>Tu plan de salud, mas facil.</p>
+          <p class="footer-small">
+            Este sitio entrega orientacion comercial y personalizada sobre alternativas de planes de salud. La
+            contratacion final depende de evaluacion, disponibilidad y condiciones de cada institucion.
+          </p>
+        </div>
+        <div>
+          <h2>Contacto</h2>
+          <a data-whatsapp-link href="https://wa.me/56942544093?text=Hola%2C%20quiero%20cotizar%20o%20mejorar%20mi%20plan%20de%20salud">WhatsApp</a>
+          <a href="mailto:contacto@tuplanf4cil.cl">contacto@tuplanf4cil.cl</a>
+        </div>
+        <div>
+          <h2>Links</h2>
+          <a href="#inicio">Inicio</a>
+          <a href="#asesoria">Beneficios</a>
+          <a href="#leadForm">Cotizar</a>
+          <a href="#faq">Preguntas frecuentes</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Reemplaza 56942544093 por tu numero real con codigo de pais, sin + ni espacios. -->
+    <a
+      class="whatsapp-float"
+      data-whatsapp-link
+      href="https://wa.me/56942544093?text=Hola%2C%20quiero%20cotizar%20o%20mejorar%20mi%20plan%20de%20salud"
+      aria-label="Hablar por WhatsApp"
+    >
+      WhatsApp
+    </a>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,3 +1,6 @@
 .codex/
 .codex/claude_import/
 .claude_import_private/
+AGENTS.md
+CONTEXTO_TUPLANF4CIL.md
+*.zip
