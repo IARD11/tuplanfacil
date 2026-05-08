@@ -378,7 +378,7 @@ textarea:focus {
 }
 
 .hero-form {
-  order: 2;
+  order: 3;
   display: grid;
   align-items: start;
   gap: 8px 10px;
@@ -526,7 +526,7 @@ label span {
 }
 
 .about-mini {
-  order: 3;
+  order: 2;
   display: flex;
   flex-direction: column;
   gap: 16px;
