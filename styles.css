@@ -362,7 +362,6 @@ textarea:focus {
   display: grid;
   gap: 18px;
   align-items: stretch;
-  min-height: calc(100dvh - 74px);
 }
 
 .lead-form,
@@ -480,11 +479,6 @@ label span {
   font-weight: 800;
 }
 
-.hero-sub-grid {
-  display: grid;
-  gap: 16px;
-  margin-top: 16px;
-}
 
 .hero-copy {
   display: flex;
@@ -879,22 +873,14 @@ label span {
   }
 
   .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: stretch;
   }
 
   .hero-form {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     padding: 20px;
-  }
-
-  .hero-sub-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: stretch;
-  }
-
-  .about-mini {
-    min-height: 100%;
   }
 
   /* Fija altura de labels para alinear inputs aunque haya labels de distinto largo */
@@ -933,22 +919,8 @@ label span {
 
 @media (min-width: 1100px) {
   .hero-grid {
-    grid-template-columns: minmax(360px, 1fr) minmax(0, 1.05fr);
-    min-height: auto;
-    align-items: start;
-    gap: 28px;
-  }
-
-  /* En escritorio amplio: form | hero-copy lado a lado, hero-copy se estira al alto del form */
-  .hero-grid {
-    grid-template-columns: minmax(360px, 1fr) minmax(0, 1.05fr);
-    align-items: stretch;
-    min-height: auto;
-    gap: 28px;
-  }
-
-  .hero-sub-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
   }
 }
 
