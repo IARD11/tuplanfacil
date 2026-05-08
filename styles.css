@@ -988,6 +988,105 @@ label span {
   }
 }
 
+/* ─── Logos belt (Isapres + Clínicas) ────────────────── */
+.logos-section {
+  padding: 56px 0;
+  background: var(--gris-fondo);
+  border-top: 1px solid var(--linea);
+  border-bottom: 1px solid var(--linea);
+  overflow: hidden;
+}
+
+.logos-group-label {
+  max-width: var(--container);
+  margin: 0 auto 12px;
+  padding-inline: 16px;
+  color: var(--gris-suave);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.logos-belt-wrap {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+}
+
+.logos-belt {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  animation: belt-left 30s linear infinite;
+}
+
+.logos-belt-reverse {
+  animation: belt-right 36s linear infinite;
+}
+
+.logos-belt-wrap:hover .logos-belt {
+  animation-play-state: paused;
+}
+
+@keyframes belt-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes belt-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.logo-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  min-width: 130px;
+  padding: 0 20px;
+  background: var(--blanco);
+  border: 1.5px solid var(--linea);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra-suave);
+  flex-shrink: 0;
+  transition: box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.logo-item:hover {
+  border-color: var(--azul);
+  box-shadow: 0 8px 24px rgba(0, 109, 204, 0.12);
+}
+
+.logo-item img {
+  max-height: 30px;
+  max-width: 110px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.65;
+  transition: filter 250ms ease, opacity 250ms ease;
+}
+
+.logo-item:hover img {
+  filter: none;
+  opacity: 1;
+}
+
+.logo-item span {
+  color: var(--gris-texto);
+  font-size: 0.86rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logos-belt {
+    animation: none !important;
+  }
+}
+
 /* ─── Social proof strip ──────────────────────────────── */
 .social-proof {
   background: var(--celeste-claro);
