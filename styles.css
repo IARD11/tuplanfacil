@@ -670,22 +670,19 @@ label span {
   justify-content: center;
   height: 52px;
   padding: 8px 16px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: #fff;
   border-radius: var(--radio);
-  transition: background 200ms;
+  transition: box-shadow 200ms;
 }
 
 .corp-logo-item:hover {
-  background: rgba(255,255,255,0.22);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
 }
 
 .corp-logo-item img {
   max-height: 32px;
   max-width: 120px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
-  opacity: 0.85;
 }
 
 .corp-logo-item:hover img {
