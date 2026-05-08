@@ -895,9 +895,19 @@ label span {
     align-items: stretch;
   }
 
-  .hero-copy,
+  /* hero-copy ocupa todo el ancho arriba; about-mini y hero-logos-card debajo */
+  .hero-copy {
+    grid-column: 1 / -1;
+    min-height: 0;
+  }
+
   .about-mini {
     min-height: 100%;
+  }
+
+  /* Alinea labels para que no descuadren el form cuando hay labels largos */
+  .form-col > label {
+    min-height: 2.4em;
   }
 
   .split {
@@ -934,10 +944,7 @@ label span {
     gap: 28px;
   }
 
-  /* En escritorio amplio: authority en una sola columna para no saturar */
-  .hero-authority {
-    grid-template-columns: 1fr;
-  }
+  /* En escritorio amplio hero-authority mantiene 2 columnas internas */
 }
 
 @media (max-width: 640px) {
@@ -986,6 +993,72 @@ label span {
     right: 12px;
     bottom: 12px;
   }
+}
+
+/* ─── Hero logos card (cuadro en hero derecho) ────────── */
+.hero-logos-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 20px;
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra-suave);
+}
+
+.hero-logos-card h3 {
+  color: var(--azul-profundo);
+  font-size: 1rem;
+  margin-top: 4px;
+}
+
+.hero-logos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 7px;
+  flex: 1;
+  align-content: start;
+}
+
+.logo-item-sm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 5px 8px;
+  background: var(--gris-fondo);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.logo-item-sm:hover {
+  background: var(--celeste-claro);
+  border-color: var(--azul);
+}
+
+.logo-item-sm img {
+  max-height: 22px;
+  max-width: 72px;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.65;
+  transition: filter 250ms, opacity 250ms;
+}
+
+.logo-item-sm:hover img {
+  filter: none;
+  opacity: 1;
+}
+
+.logo-item-sm span {
+  color: var(--gris-texto);
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.2;
 }
 
 /* ─── Logos belt (Isapres + Clínicas) ────────────────── */

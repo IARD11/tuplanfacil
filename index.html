@@ -131,7 +131,7 @@
             </div>
 
             <div class="form-row form-col">
-              <label for="isapreActual">Isapre actual, si corresponde</label>
+              <label for="isapreActual">Isapre actual</label>
               <select id="isapreActual" name="isapreActual">
                 <option value="">Selecciona una opción</option>
                 <option>No tengo Isapre</option>
@@ -258,6 +258,29 @@
                 onerror="this.onerror=null; this.src='assets/images/tiburon-variantes-alt.png';"
               />
             </aside>
+
+            <!-- Card de logos Isapres + Clínicas en el hero -->
+            <div class="hero-logos-card reveal">
+              <p class="eyebrow">Con quiénes trabajamos</p>
+              <h3>Todas las Isapres y principales clínicas</h3>
+              <div class="hero-logos-grid">
+                <div class="logo-item-sm"><img src="assets/images/logos/banmedica.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Banmédica</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/colmena.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Colmena</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/consalud.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Consalud</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/cruzblanca.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Cruz Blanca</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/masvida.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Masvida</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/vidatres.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Vida Tres</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/esencial.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Esencial</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/clinica-uc.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Clínica UC</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/santa-maria.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Santa María</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/redsalud.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>RedSalud</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/alemana.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Alemana</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/las-condes.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Las Condes</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/bupa.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Bupa</span></div>
+                <div class="logo-item-sm"><img src="assets/images/logos/indisa.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')"><span hidden>Indisa</span></div>
+              </div>
+              <a class="btn btn-secondary" href="#logos-section" style="font-size:0.82rem; margin-top:4px">Ver todas las clínicas ↓</a>
+            </div>
           </div>
         </div>
       </section>
@@ -310,13 +333,13 @@
         </div>
       </section>
 
-      <!-- ── Logos Isapres + Clínicas ─────────────────────────
+      <!-- ── Logos Isapres + Clínicas (franja completa) ───────
            Agrega los archivos de logo en assets/images/logos/
            con los nombres indicados en cada img src.
            Mientras no estén los archivos, se muestra el nombre
            en texto como fallback.
       ──────────────────────────────────────────────────── -->
-      <section class="logos-section" aria-label="Isapres y clínicas con las que trabajamos">
+      <section class="logos-section" id="logos-section" aria-label="Isapres y clínicas con las que trabajamos">
         <div class="container">
           <div class="section-heading reveal" style="margin-bottom:36px">
             <p class="eyebrow">Con quiénes trabajamos</p>
