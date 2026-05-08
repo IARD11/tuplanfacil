@@ -658,18 +658,17 @@ label span {
 }
 
 .corporate-logos-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 10px;
-  align-items: center;
 }
 
 .corp-logo-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 52px;
-  padding: 8px 16px;
+  height: 64px;
+  padding: 8px 12px;
   background: #fff;
   border-radius: var(--radio);
   transition: box-shadow 200ms;
@@ -1031,6 +1030,10 @@ label span {
   .whatsapp-float {
     right: 12px;
     bottom: 12px;
+  }
+
+  .corporate-logos-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
