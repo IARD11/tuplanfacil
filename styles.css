@@ -495,15 +495,16 @@ label span {
 }
 
 .hero-copy h1,
-.hero-copy p,
-.about-mini h2,
-.about-mini p {
+.hero-copy p {
   color: var(--blanco);
 }
 
-.hero-copy .eyebrow,
-.about-mini .eyebrow {
+.hero-copy .eyebrow {
   color: #AEEBFF;
+}
+
+.about-mini .eyebrow {
+  color: var(--azul);
 }
 
 .hero-lead {
@@ -534,8 +535,6 @@ label span {
   flex-direction: column;
   gap: 16px;
   padding: 18px 20px;
-  background: linear-gradient(135deg, var(--azul-profundo), var(--azul-noche));
-  border-color: rgba(174, 235, 255, 0.24);
 }
 
 .about-mini h2 {
@@ -1019,11 +1018,19 @@ label span {
   margin-top: 4px;
 }
 
+.logos-group-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gris-suave);
+  margin-bottom: 2px;
+}
+
 .hero-logos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 7px;
-  flex: 1;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
   align-content: start;
 }
 
@@ -1031,8 +1038,8 @@ label span {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 38px;
-  padding: 5px 8px;
+  min-height: 48px;
+  padding: 7px 10px;
   background: var(--gris-fondo);
   border: 1px solid var(--linea);
   border-radius: var(--radio);
@@ -1045,8 +1052,8 @@ label span {
 }
 
 .logo-item-sm img {
-  max-height: 22px;
-  max-width: 72px;
+  max-height: 28px;
+  max-width: 80px;
   object-fit: contain;
   filter: grayscale(1);
   opacity: 0.65;
