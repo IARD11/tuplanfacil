@@ -905,9 +905,12 @@ label span {
     min-height: 100%;
   }
 
-  /* Alinea labels para que no descuadren el form cuando hay labels largos */
+  /* Fija altura de labels para alinear inputs aunque haya labels de distinto largo */
   .form-col > label {
-    min-height: 2.4em;
+    min-height: 44px;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 2px;
   }
 
   .split {
