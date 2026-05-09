@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://www.google-analytics.com https://analytics.google.com https://region1.analytics.google.com; object-src 'none'; base-uri 'self';" />
     <title>TuPlanFácil | Cotiza y mejora tu plan de salud en Chile</title>
     <meta
       name="description"
@@ -252,21 +253,27 @@
               <p>Te contacto por WhatsApp para orientarte según tu situación actual.</p>
             </div>
 
+            <!-- honeypot: oculto para humanos, los bots lo rellenan -->
+            <div class="hp-field" aria-hidden="true">
+              <label for="website">No rellenar</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+
             <div class="form-row form-col">
               <label for="nombre">Nombre completo <span>*</span></label>
-              <input id="nombre" name="nombre" type="text" autocomplete="name" required />
+              <input id="nombre" name="nombre" type="text" autocomplete="name" maxlength="100" required />
               <small class="field-error" data-error-for="nombre"></small>
             </div>
 
             <div class="form-row form-col">
               <label for="telefono">Teléfono <span>*</span></label>
-              <input id="telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" required />
+              <input id="telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" required />
               <small class="field-error" data-error-for="telefono"></small>
             </div>
 
             <div class="form-row form-col">
               <label for="email">Correo electrónico <span>*</span></label>
-              <input id="email" name="email" type="email" autocomplete="email" required />
+              <input id="email" name="email" type="email" autocomplete="email" maxlength="100" required />
               <small class="field-error" data-error-for="email"></small>
             </div>
 
@@ -330,7 +337,7 @@
 
             <div class="form-row form-col">
               <label for="renta">Renta aproximada</label>
-              <input id="renta" name="renta" type="text" inputmode="numeric" placeholder="$1.200.000" />
+              <input id="renta" name="renta" type="text" inputmode="numeric" placeholder="$1.200.000" maxlength="20" />
             </div>
 
             <div class="form-row form-col">
@@ -357,7 +364,7 @@
 
             <div class="form-row form-wide">
               <label for="comentario">Comentarios</label>
-              <textarea id="comentario" name="comentario" rows="2" placeholder="Cuéntame qué quieres revisar. Si tienes más de 3 beneficiarios, anota acá sus edades."></textarea>
+              <textarea id="comentario" name="comentario" rows="2" maxlength="500" placeholder="Cuéntame qué quieres revisar. Si tienes más de 3 beneficiarios, anota acá sus edades."></textarea>
             </div>
 
             <button class="btn btn-primary submit-btn form-submit-wide" type="submit">Enviar solicitud</button>

@@ -1,9 +1,8 @@
 const SITE_CONFIG = {
   whatsappNumber: "56942544093",
   whatsappText: "Hola, quiero cotizar o mejorar mi plan de salud",
-  // Pega aquí la URL de tu Google Apps Script desplegado como Web App.
-  // Ver instrucciones en google-apps-script.gs
   sheetsEndpoint: "https://script.google.com/macros/s/AKfycbz_f6ZFvixC_giygn9As7TTF9GszV6FyyQPHYlTPDmAM6udKUzqHIBQ_9ZvSg-ZMb-v/exec",
+  submitCooldownMs: 60000,
 };
 
 const navToggle = document.querySelector("[data-nav-toggle]");
@@ -11,6 +10,12 @@ const nav = document.querySelector("[data-nav]");
 const whatsappLinks = document.querySelectorAll("[data-whatsapp-link]");
 const leadForm = document.querySelector("#leadForm");
 const formStatus = document.querySelector("#formStatus");
+
+let lastSubmitTime = 0;
+
+function stripHtml(str) {
+  return str.replace(/<[^>]*>/g, "").replace(/[<>]/g, "");
+}
 
 function whatsappUrl(message = SITE_CONFIG.whatsappText) {
   return `https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`;
@@ -50,7 +55,7 @@ function clearFormErrors() {
 }
 
 function getValue(formData, key) {
-  return String(formData.get(key) || "").trim();
+  return stripHtml(String(formData.get(key) || "").trim());
 }
 
 function validateForm(formData) {
@@ -168,6 +173,17 @@ leadForm?.addEventListener("submit", async (event) => {
 
   const formData = new FormData(leadForm);
 
+  // Honeypot: bots llenan este campo, humanos no
+  if (formData.get("website")) return;
+
+  // Cooldown: evita envíos repetidos en menos de 60 segundos
+  const now = Date.now();
+  if (now - lastSubmitTime < SITE_CONFIG.submitCooldownMs) {
+    formStatus.textContent = "Espera un momento antes de volver a enviar.";
+    formStatus.classList.add("error");
+    return;
+  }
+
   if (!validateForm(formData)) {
     formStatus.textContent = "Revisa los campos marcados y vuelve a intentar.";
     formStatus.classList.add("error");
@@ -179,6 +195,8 @@ leadForm?.addEventListener("submit", async (event) => {
     submitBtn.disabled = true;
     submitBtn.textContent = "Enviando…";
   }
+
+  lastSubmitTime = now;
 
   const data = Object.fromEntries(formData.entries());
   await submitToSheets(data);
