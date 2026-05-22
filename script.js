@@ -1,7 +1,8 @@
 const SITE_CONFIG = {
   whatsappNumber: "56942544093",
   whatsappText: "Hola, quiero cotizar o mejorar mi plan de salud",
-  sheetsEndpoint: "https://script.google.com/macros/s/AKfycbz_f6ZFvixC_giygn9As7TTF9GszV6FyyQPHYlTPDmAM6udKUzqHIBQ_9ZvSg-ZMb-v/exec",
+  supabaseUrl: "https://krxlcsnvullrubryponq.supabase.co",
+  supabaseKey: "sb_publishable_L2lJ4PSyiUZPMEbkrFjOIQ_fJ9y9Wwb",
   submitCooldownMs: 60000,
   testimonialsStorageKey: "tuplanfacil-testimonials",
   maxVisibleTestimonials: 12,
@@ -81,6 +82,25 @@ function getValue(formData, key) {
   return stripHtml(String(formData.get(key) || "").trim());
 }
 
+function nullableValue(formData, key) {
+  const value = getValue(formData, key);
+  return value || null;
+}
+
+function parseOptionalInteger(value) {
+  const number = Number.parseInt(String(value || "").replace(/\D/g, ""), 10);
+  return Number.isFinite(number) ? number : null;
+}
+
+function formPayload(formData) {
+  const payload = {};
+  formData.forEach((value, key) => {
+    if (String(key).toLowerCase().includes("website")) return;
+    payload[key] = stripHtml(String(value || "")).slice(0, 1000);
+  });
+  return payload;
+}
+
 function validateForm(formData) {
   let valid = true;
   const email = getValue(formData, "email");
@@ -129,17 +149,60 @@ function buildLeadSummary(formData) {
   return ["Hola, quiero cotizar o mejorar mi plan de salud.", "", ...lines].join("\n");
 }
 
-async function submitToSheets(data) {
-  if (!SITE_CONFIG.sheetsEndpoint) return;
-  try {
-    await fetch(SITE_CONFIG.sheetsEndpoint, {
-      method: "POST",
-      mode: "no-cors",
-      body: new URLSearchParams(data),
-    });
-  } catch (_) {
-    // Falla silenciosa — WhatsApp es la conversión principal
+async function supabaseRequest(path, { method = "GET", body, prefer } = {}) {
+  if (!SITE_CONFIG.supabaseUrl || !SITE_CONFIG.supabaseKey) {
+    throw new Error("Supabase no está configurado.");
   }
+
+  const headers = {
+    apikey: SITE_CONFIG.supabaseKey,
+    Authorization: `Bearer ${SITE_CONFIG.supabaseKey}`,
+    Accept: "application/json",
+  };
+
+  if (body) headers["Content-Type"] = "application/json";
+  if (prefer) headers.Prefer = prefer;
+
+  const response = await fetch(`${SITE_CONFIG.supabaseUrl}/rest/v1/${path}`, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(message || `Error Supabase ${response.status}`);
+  }
+
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
+}
+
+async function submitLeadToSupabase(formData) {
+  const lead = {
+    name: getValue(formData, "nombre"),
+    phone: getValue(formData, "telefono"),
+    email: nullableValue(formData, "email"),
+    age: parseOptionalInteger(getValue(formData, "edad")),
+    region: nullableValue(formData, "region"),
+    comuna: nullableValue(formData, "comuna"),
+    current_system: nullableValue(formData, "sistema"),
+    current_isapre: nullableValue(formData, "isapreActual"),
+    income: nullableValue(formData, "renta"),
+    dependents: parseOptionalInteger(getValue(formData, "cargas")),
+    afp_advice: nullableValue(formData, "afp"),
+    comment: nullableValue(formData, "comentario"),
+    source: "landing",
+    page_url: window.location.href,
+    user_agent: navigator.userAgent,
+    raw_payload: formPayload(formData),
+  };
+
+  return supabaseRequest("leads", {
+    method: "POST",
+    body: lead,
+    prefer: "return=minimal",
+  });
 }
 
 function setTestimonialError(fieldName, message) {
@@ -193,7 +256,7 @@ function saveStoredTestimonials(testimonials) {
 function normalizeTestimonial(item) {
   return {
     id: item.id || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-    name: publicName(item.name || item.nombre || ""),
+    name: publicName(item.name || item.nombre || item.public_name || item.publicName || ""),
     context: stripHtml(item.context || item.contexto || "Cliente TuPlanFácil").slice(0, 90),
     rating: clampRating(item.rating || item.calificacion || 5),
     comment: stripHtml(item.comment || item.comentario || "").slice(0, 420),
@@ -263,28 +326,18 @@ function renderTestimonials(testimonials) {
   testimonials.forEach((testimonial) => testimonialList.append(createTestimonialCard(testimonial)));
 }
 
-function loadTestimonialsFromSheets() {
-  if (!SITE_CONFIG.sheetsEndpoint || !testimonialList) return;
+async function loadTestimonialsFromSupabase() {
+  if (!testimonialList) return;
 
-  const callbackName = `tuplanfacilTestimonials${Date.now()}`;
-  const script = document.createElement("script");
-  const separator = SITE_CONFIG.sheetsEndpoint.includes("?") ? "&" : "?";
-
-  window[callbackName] = (payload) => {
-    const remote = Array.isArray(payload) ? payload : payload.testimonials || [];
-    const merged = mergeTestimonials(remote, getStoredTestimonials(), SITE_CONFIG.defaultTestimonials);
+  try {
+    const remote = await supabaseRequest(
+      "testimonials?select=id,created_at,public_name,context,rating,comment&order=created_at.desc&limit=12"
+    );
+    const merged = mergeTestimonials(remote || [], getStoredTestimonials(), SITE_CONFIG.defaultTestimonials);
     renderTestimonials(merged);
-    delete window[callbackName];
-    script.remove();
-  };
-
-  script.onerror = () => {
-    delete window[callbackName];
-    script.remove();
-  };
-
-  script.src = `${SITE_CONFIG.sheetsEndpoint}${separator}tipo=testimonios&callback=${callbackName}&t=${Date.now()}`;
-  document.body.append(script);
+  } catch (err) {
+    console.warn("No se pudieron cargar opiniones desde Supabase:", err);
+  }
 }
 
 function buildTestimonial(formData) {
@@ -318,6 +371,31 @@ function validateTestimonial(formData) {
   }
 
   return valid;
+}
+
+async function submitTestimonialToSupabase(testimonial) {
+  const payload = {
+    public_name: testimonial.name,
+    context: testimonial.context,
+    rating: testimonial.rating,
+    comment: testimonial.comment,
+    consent: true,
+    is_published: true,
+    source: "landing",
+    user_agent: navigator.userAgent,
+    raw_payload: {
+      page_url: window.location.href,
+      submitted_at: new Date().toISOString(),
+    },
+  };
+
+  const rows = await supabaseRequest("testimonials", {
+    method: "POST",
+    body: payload,
+    prefer: "return=representation",
+  });
+
+  return Array.isArray(rows) && rows[0] ? normalizeTestimonial(rows[0]) : testimonial;
 }
 
 navToggle?.addEventListener("click", () => {
@@ -399,8 +477,12 @@ leadForm?.addEventListener("submit", async (event) => {
 
   lastSubmitTime = now;
 
-  const data = Object.fromEntries(formData.entries());
-  await submitToSheets(data);
+  try {
+    await submitLeadToSupabase(formData);
+  } catch (err) {
+    // WhatsApp sigue siendo la conversión principal; registramos el error sin bloquear al usuario.
+    console.warn("No se pudo guardar el lead en Supabase:", err);
+  }
 
   window.open(whatsappUrl(buildLeadSummary(formData)), "_blank", "noopener");
 
@@ -434,25 +516,39 @@ testimonialForm?.addEventListener("submit", async (event) => {
     return;
   }
 
-  const testimonial = buildTestimonial(formData);
-  const current = mergeTestimonials([testimonial], getStoredTestimonials(), SITE_CONFIG.defaultTestimonials);
-  saveStoredTestimonials(current);
-  renderTestimonials(current);
+  const submitBtn = testimonialForm.querySelector(".testimonial-submit");
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Publicando…";
+  }
 
-  testimonialStatus.textContent = "Comentario publicado. Gracias por ayudar a otras personas a decidir mejor.";
-  testimonialStatus.classList.add("success");
+  try {
+    const testimonial = buildTestimonial(formData);
+    const savedTestimonial = await submitTestimonialToSupabase(testimonial);
+    const current = mergeTestimonials(
+      [savedTestimonial],
+      getStoredTestimonials(),
+      SITE_CONFIG.defaultTestimonials
+    );
 
-  await submitToSheets({
-    tipo: "testimonio",
-    nombre: testimonial.name,
-    contexto: testimonial.context,
-    calificacion: String(testimonial.rating),
-    comentario: testimonial.comment,
-    consentimiento: "si",
-    estado: "Publicado",
-  });
+    saveStoredTestimonials(current);
+    renderTestimonials(current);
 
-  testimonialForm.reset();
+    testimonialStatus.textContent =
+      "Comentario publicado. Gracias por ayudar a otras personas a decidir mejor.";
+    testimonialStatus.classList.add("success");
+    testimonialForm.reset();
+  } catch (err) {
+    console.warn("No se pudo publicar la opinión:", err);
+    testimonialStatus.textContent =
+      "No pudimos publicar tu comentario en este momento. Inténtalo nuevamente.";
+    testimonialStatus.classList.add("error");
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Publicar comentario";
+    }
+  }
 });
 
 testimonialForm?.addEventListener("input", () => {
@@ -460,5 +556,5 @@ testimonialForm?.addEventListener("input", () => {
 });
 
 renderTestimonials(mergeTestimonials(getStoredTestimonials(), SITE_CONFIG.defaultTestimonials));
-loadTestimonialsFromSheets();
+loadTestimonialsFromSupabase();
 syncWhatsappLinks();
