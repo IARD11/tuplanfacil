@@ -1,10 +1,10 @@
 // =============================================================
-// TuPlanFácil — Google Apps Script para captura de leads
+// TuPlanFácil — Google Apps Script para captura de leads y testimonios
 // =============================================================
 //
 // INSTRUCCIONES DE INSTALACIÓN:
 //
-// 1. Crea un nuevo Google Sheet y renombra la hoja a "Leads".
+// 1. Crea un nuevo Google Sheet. El script creara/actualizara las hojas "Leads" y "Testimonios".
 // 2. En el menú: Extensiones → Apps Script.
 // 3. Borra el código por defecto y pega TODO este archivo.
 // 4. Guarda (Ctrl+S) con el nombre "TuPlanFacil-Leads".
@@ -23,28 +23,83 @@
 
 // ID del Google Sheet "TuPlanFácil - Leads" creado en tu Drive
 const SHEET_ID = "1kqYCuJf5AW7sDoRqN8tTl944s4MuRidCNjM85GCvsPg";
+const LEADS_SHEET_NAME = "Leads";
+const TESTIMONIALS_SHEET_NAME = "Testimonios";
 
-// Función de prueba — abre esta URL en el navegador para verificar acceso a la hoja
-function doGet() {
+function outputJson(payload, callback) {
+  const json = JSON.stringify(payload);
+  if (callback) {
+    return ContentService
+      .createTextOutput(`${callback}(${json});`)
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+
+  return ContentService
+    .createTextOutput(json)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function getOrCreateSheet(ss, name) {
+  return ss.getSheetByName(name) || ss.insertSheet(name);
+}
+
+function publicTestimonials(ss) {
+  const sheet = ss.getSheetByName(TESTIMONIALS_SHEET_NAME);
+  if (!sheet || sheet.getLastRow() < 2) return [];
+
+  const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, 7).getValues();
+  return rows
+    .reverse()
+    .filter((row) => String(row[5]).toLowerCase() === "si" && String(row[6]).toLowerCase() === "publicado")
+    .map((row) => ({
+      id: String(row[0].getTime ? row[0].getTime() : row[0]),
+      name: row[1] || "Cliente TuPlanFácil",
+      context: row[2] || "Cliente TuPlanFácil",
+      rating: row[3] || 5,
+      comment: row[4] || "",
+    }))
+    .filter((item) => item.comment)
+    .slice(0, 24);
+}
+
+// Función de prueba y lectura publica de testimonios
+function doGet(e) {
   try {
     const ss = SpreadsheetApp.openById(SHEET_ID);
-    const sheet = ss.getSheetByName("Leads") || ss.getActiveSheet();
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: "ok", sheet: sheet.getName(), rows: sheet.getLastRow() }))
-      .setMimeType(ContentService.MimeType.JSON);
+    const p = e && e.parameter ? e.parameter : {};
+
+    if (p.tipo === "testimonios") {
+      return outputJson({ status: "ok", testimonials: publicTestimonials(ss) }, p.callback);
+    }
+
+    const sheet = getOrCreateSheet(ss, LEADS_SHEET_NAME);
+    return outputJson({ status: "ok", sheet: sheet.getName(), rows: sheet.getLastRow() }, p.callback);
   } catch (err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: "error", message: err.message }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return outputJson({ status: "error", message: err.message }, e && e.parameter ? e.parameter.callback : "");
   }
 }
 
 function doPost(e) {
   try {
     const ss = SpreadsheetApp.openById(SHEET_ID);
-    const sheet = ss.getSheetByName("Leads") || ss.getActiveSheet();
     const p = e.parameter;
 
+    if (p.tipo === "testimonio") {
+      const sheet = getOrCreateSheet(ss, TESTIMONIALS_SHEET_NAME);
+      sheet.appendRow([
+        new Date(),
+        p.nombre || "",
+        p.contexto || "",
+        p.calificacion || "",
+        p.comentario || "",
+        p.consentimiento || "",
+        p.estado || "Publicado",
+      ]);
+
+      return outputJson({ status: "ok", type: "testimonio" });
+    }
+
+    const sheet = getOrCreateSheet(ss, LEADS_SHEET_NAME);
     sheet.appendRow([
       new Date(),
       p.nombre       || "",
@@ -60,21 +115,17 @@ function doPost(e) {
       p.comentario   || "",
     ]);
 
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: "ok" }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return outputJson({ status: "ok", type: "lead" });
 
   } catch (err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: "error", message: err.message }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return outputJson({ status: "error", message: err.message });
   }
 }
 
 // Ejecuta esta función UNA VEZ para crear los encabezados.
 function setupHeaders() {
   const ss = SpreadsheetApp.openById(SHEET_ID);
-  const sheet = ss.getSheetByName("Leads") || ss.getActiveSheet();
+  const sheet = getOrCreateSheet(ss, LEADS_SHEET_NAME);
 
   sheet.getRange(1, 1, 1, 12).setValues([[
     "Fecha",
@@ -93,4 +144,18 @@ function setupHeaders() {
 
   sheet.getRange(1, 1, 1, 12).setFontWeight("bold");
   sheet.setFrozenRows(1);
+
+  const testimonials = getOrCreateSheet(ss, TESTIMONIALS_SHEET_NAME);
+  testimonials.getRange(1, 1, 1, 7).setValues([[
+    "Fecha",
+    "Nombre Público",
+    "Contexto",
+    "Calificación",
+    "Comentario",
+    "Consentimiento",
+    "Estado",
+  ]]);
+
+  testimonials.getRange(1, 1, 1, 7).setFontWeight("bold");
+  testimonials.setFrozenRows(1);
 }

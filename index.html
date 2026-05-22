@@ -646,39 +646,93 @@
         </div>
       </section>
 
-      <!-- ── Testimonios ────────────────────────────────────
-           Reemplaza estas tarjetas con testimonios reales de
-           clientes. Incluye nombre (puede ser solo el primero),
-           ciudad o región, y la cita textual.
-      ──────────────────────────────────────────────────── -->
       <section class="section-pad testimonials" aria-labelledby="testimonials-title">
         <div class="container">
           <div class="section-heading reveal">
             <p class="eyebrow">Lo que dicen nuestros clientes</p>
-            <h2 id="testimonials-title">Personas reales, decisiones mejor informadas</h2>
+            <h2 id="testimonials-title">Recomendaciones reales de personas que recibieron orientación</h2>
+            <p>
+              Si ya conversaste con TuPlanFácil, tu experiencia puede ayudar a otras personas a decidir con más
+              confianza. Los comentarios se publican con autorización.
+            </p>
           </div>
-          <div class="testimonials-grid">
-            <blockquote class="testimonial-card reveal">
-              <p>Tenía Fonasa hace años y nunca me había planteado cambiarme. Me explicaron mis opciones de forma muy clara y terminé con un plan mucho mejor para mi familia.</p>
-              <footer>
-                <strong>M. González</strong>
-                <span>Región Metropolitana</span>
-              </footer>
-            </blockquote>
-            <blockquote class="testimonial-card reveal">
-              <p>Subieron el precio de mi Isapre y no sabía qué hacer. En menos de una semana ya tenía un plan nuevo con mejor cobertura y pagando menos.</p>
-              <footer>
-                <strong>R. Soto</strong>
-                <span>Valparaíso</span>
-              </footer>
-            </blockquote>
-            <blockquote class="testimonial-card reveal">
-              <p>Lo que más valoro es que te explican sin presionarte a cambiar. Te dan la información y tú decides. Eso genera mucha confianza.</p>
-              <footer>
-                <strong>C. Muñoz</strong>
-                <span>Biobío</span>
-              </footer>
-            </blockquote>
+
+          <div class="testimonial-layout">
+            <div>
+              <div class="testimonials-grid" id="testimonialList" aria-live="polite">
+                <article class="testimonial-card testimonial-empty" data-testimonial-empty>
+                  <p>Estamos reuniendo recomendaciones reales de clientes. Sé la primera persona en dejar tu experiencia.</p>
+                  <footer>
+                    <strong>TuPlanFácil</strong>
+                    <span>Comentarios verificados por autorización</span>
+                  </footer>
+                </article>
+              </div>
+              <p class="testimonial-note">
+                Los comentarios publicados corresponden a experiencias personales y no garantizan resultados específicos.
+              </p>
+            </div>
+
+            <form class="testimonial-form" id="testimonialForm" novalidate>
+              <div class="testimonial-form-head">
+                <p class="eyebrow">Deja tu comentario</p>
+                <h3>¿Cómo fue tu experiencia?</h3>
+                <p>Se publicará altiro en esta sección usando tu nombre abreviado.</p>
+              </div>
+
+              <div class="form-row hp-field" aria-hidden="true">
+                <label for="reviewWebsite">No completar</label>
+                <input id="reviewWebsite" name="reviewWebsite" type="text" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <div class="form-row">
+                <label for="reviewName">Nombre <span>*</span></label>
+                <input id="reviewName" name="reviewName" type="text" maxlength="80" required placeholder="Ej: Camila Rojas" />
+                <small class="field-error" data-error-for="reviewName"></small>
+              </div>
+
+              <div class="form-row">
+                <label for="reviewContext">Ciudad, región o tipo de caso</label>
+                <input id="reviewContext" name="reviewContext" type="text" maxlength="90" placeholder="Ej: Plan familiar, Santiago" />
+              </div>
+
+              <div class="form-row">
+                <label for="reviewRating">Calificación <span>*</span></label>
+                <select id="reviewRating" name="reviewRating" required>
+                  <option value="">Selecciona</option>
+                  <option value="5">5 estrellas</option>
+                  <option value="4">4 estrellas</option>
+                  <option value="3">3 estrellas</option>
+                  <option value="2">2 estrellas</option>
+                  <option value="1">1 estrella</option>
+                </select>
+                <small class="field-error" data-error-for="reviewRating"></small>
+              </div>
+
+              <div class="form-row">
+                <label for="reviewComment">Comentario <span>*</span></label>
+                <textarea
+                  id="reviewComment"
+                  name="reviewComment"
+                  rows="4"
+                  maxlength="420"
+                  required
+                  placeholder="Cuéntanos brevemente cómo te ayudó la asesoría."
+                ></textarea>
+                <small class="field-error" data-error-for="reviewComment"></small>
+              </div>
+
+              <label class="testimonial-consent" for="reviewConsent">
+                <input id="reviewConsent" name="reviewConsent" type="checkbox" value="si" required />
+                <span>Autorizo publicar mi comentario con mi nombre abreviado.</span>
+              </label>
+              <small class="field-error" data-error-for="reviewConsent"></small>
+
+              <button class="btn btn-primary testimonial-submit" type="submit">Publicar comentario</button>
+              <p class="testimonial-status" id="testimonialStatus" role="status" aria-live="polite">
+                Tu comentario ayuda a construir confianza con experiencias reales.
+              </p>
+            </form>
           </div>
         </div>
       </section>

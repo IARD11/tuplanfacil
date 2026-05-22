@@ -3,6 +3,8 @@ const SITE_CONFIG = {
   whatsappText: "Hola, quiero cotizar o mejorar mi plan de salud",
   sheetsEndpoint: "https://script.google.com/macros/s/AKfycbz_f6ZFvixC_giygn9As7TTF9GszV6FyyQPHYlTPDmAM6udKUzqHIBQ_9ZvSg-ZMb-v/exec",
   submitCooldownMs: 60000,
+  testimonialsStorageKey: "tuplanfacil-testimonials",
+  maxVisibleTestimonials: 12,
 };
 
 const navToggle = document.querySelector("[data-nav-toggle]");
@@ -10,6 +12,9 @@ const nav = document.querySelector("[data-nav]");
 const whatsappLinks = document.querySelectorAll("[data-whatsapp-link]");
 const leadForm = document.querySelector("#leadForm");
 const formStatus = document.querySelector("#formStatus");
+const testimonialForm = document.querySelector("#testimonialForm");
+const testimonialList = document.querySelector("#testimonialList");
+const testimonialStatus = document.querySelector("#testimonialStatus");
 
 let lastSubmitTime = 0;
 
@@ -119,6 +124,184 @@ async function submitToSheets(data) {
   }
 }
 
+function setTestimonialError(fieldName, message) {
+  const field = document.querySelector(`#${fieldName}`);
+  const error = document.querySelector(`[data-error-for="${fieldName}"]`);
+  if (!field || !error) return;
+
+  field.closest(".form-row")?.classList.toggle("is-invalid", Boolean(message));
+  error.textContent = message;
+}
+
+function clearTestimonialErrors() {
+  ["reviewName", "reviewRating", "reviewComment", "reviewConsent"].forEach((name) =>
+    setTestimonialError(name, "")
+  );
+  testimonialStatus?.classList.remove("success", "error");
+}
+
+function publicName(fullName) {
+  const parts = stripHtml(fullName).split(/\s+/).filter(Boolean);
+  if (!parts.length) return "Cliente TuPlanFácil";
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} ${parts[1].charAt(0).toUpperCase()}.`;
+}
+
+function clampRating(value) {
+  const rating = Number(value);
+  if (!Number.isFinite(rating)) return 5;
+  return Math.min(5, Math.max(1, Math.round(rating)));
+}
+
+function getStoredTestimonials() {
+  try {
+    return JSON.parse(localStorage.getItem(SITE_CONFIG.testimonialsStorageKey) || "[]");
+  } catch (_) {
+    return [];
+  }
+}
+
+function saveStoredTestimonials(testimonials) {
+  try {
+    localStorage.setItem(
+      SITE_CONFIG.testimonialsStorageKey,
+      JSON.stringify(testimonials.slice(0, SITE_CONFIG.maxVisibleTestimonials))
+    );
+  } catch (_) {
+    // Si localStorage no esta disponible, solo mostramos el comentario en la sesion actual.
+  }
+}
+
+function normalizeTestimonial(item) {
+  return {
+    id: item.id || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    name: publicName(item.name || item.nombre || ""),
+    context: stripHtml(item.context || item.contexto || "Cliente TuPlanFácil").slice(0, 90),
+    rating: clampRating(item.rating || item.calificacion || 5),
+    comment: stripHtml(item.comment || item.comentario || "").slice(0, 420),
+  };
+}
+
+function testimonialKey(item) {
+  return `${item.name}|${item.context}|${item.comment}`.toLowerCase();
+}
+
+function mergeTestimonials(...groups) {
+  const seen = new Set();
+  return groups
+    .flat()
+    .map(normalizeTestimonial)
+    .filter((item) => item.comment)
+    .filter((item) => {
+      const key = testimonialKey(item);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .slice(0, SITE_CONFIG.maxVisibleTestimonials);
+}
+
+function createTestimonialCard(testimonial) {
+  const card = document.createElement("blockquote");
+  card.className = "testimonial-card";
+
+  const stars = document.createElement("div");
+  stars.className = "testimonial-stars";
+  stars.setAttribute("aria-label", `${testimonial.rating} de 5 estrellas`);
+  stars.textContent = "★".repeat(testimonial.rating);
+
+  const quote = document.createElement("p");
+  quote.textContent = testimonial.comment;
+
+  const footer = document.createElement("footer");
+  const name = document.createElement("strong");
+  name.textContent = testimonial.name;
+  const context = document.createElement("span");
+  context.textContent = testimonial.context;
+
+  footer.append(name, context);
+  card.append(stars, quote, footer);
+  return card;
+}
+
+function renderTestimonials(testimonials) {
+  if (!testimonialList) return;
+
+  testimonialList.innerHTML = "";
+  if (!testimonials.length) {
+    const empty = document.createElement("article");
+    empty.className = "testimonial-card testimonial-empty";
+    empty.innerHTML = `
+      <p>Estamos reuniendo recomendaciones reales de clientes. Sé la primera persona en dejar tu experiencia.</p>
+      <footer>
+        <strong>TuPlanFácil</strong>
+        <span>Comentarios verificados por autorización</span>
+      </footer>
+    `;
+    testimonialList.append(empty);
+    return;
+  }
+
+  testimonials.forEach((testimonial) => testimonialList.append(createTestimonialCard(testimonial)));
+}
+
+function loadTestimonialsFromSheets() {
+  if (!SITE_CONFIG.sheetsEndpoint || !testimonialList) return;
+
+  const callbackName = `tuplanfacilTestimonials${Date.now()}`;
+  const script = document.createElement("script");
+  const separator = SITE_CONFIG.sheetsEndpoint.includes("?") ? "&" : "?";
+
+  window[callbackName] = (payload) => {
+    const remote = Array.isArray(payload) ? payload : payload.testimonials || [];
+    const merged = mergeTestimonials(remote, getStoredTestimonials());
+    renderTestimonials(merged);
+    delete window[callbackName];
+    script.remove();
+  };
+
+  script.onerror = () => {
+    delete window[callbackName];
+    script.remove();
+  };
+
+  script.src = `${SITE_CONFIG.sheetsEndpoint}${separator}tipo=testimonios&callback=${callbackName}&t=${Date.now()}`;
+  document.body.append(script);
+}
+
+function buildTestimonial(formData) {
+  return normalizeTestimonial({
+    id: `${Date.now()}`,
+    name: getValue(formData, "reviewName"),
+    context: getValue(formData, "reviewContext") || "Cliente TuPlanFácil",
+    rating: getValue(formData, "reviewRating"),
+    comment: getValue(formData, "reviewComment"),
+  });
+}
+
+function validateTestimonial(formData) {
+  let valid = true;
+
+  if (!getValue(formData, "reviewName")) {
+    setTestimonialError("reviewName", "Ingresa tu nombre.");
+    valid = false;
+  }
+  if (!getValue(formData, "reviewRating")) {
+    setTestimonialError("reviewRating", "Selecciona una calificación.");
+    valid = false;
+  }
+  if (getValue(formData, "reviewComment").length < 12) {
+    setTestimonialError("reviewComment", "Escribe un comentario un poco más completo.");
+    valid = false;
+  }
+  if (formData.get("reviewConsent") !== "si") {
+    setTestimonialError("reviewConsent", "Necesitamos tu autorización para publicarlo.");
+    valid = false;
+  }
+
+  return valid;
+}
+
 navToggle?.addEventListener("click", () => {
   const isOpen = document.body.classList.toggle("nav-open");
   navToggle.setAttribute("aria-expanded", String(isOpen));
@@ -218,4 +401,46 @@ leadForm?.addEventListener("input", () => {
   formStatus.classList.remove("success", "error");
 });
 
+testimonialForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  clearTestimonialErrors();
+
+  const formData = new FormData(testimonialForm);
+
+  // Honeypot: si un bot completa este campo oculto, no publicamos nada.
+  if (formData.get("reviewWebsite")) return;
+
+  if (!validateTestimonial(formData)) {
+    testimonialStatus.textContent = "Revisa los campos marcados y vuelve a intentar.";
+    testimonialStatus.classList.add("error");
+    return;
+  }
+
+  const testimonial = buildTestimonial(formData);
+  const current = mergeTestimonials([testimonial], getStoredTestimonials());
+  saveStoredTestimonials(current);
+  renderTestimonials(current);
+
+  testimonialStatus.textContent = "Comentario publicado. Gracias por ayudar a otras personas a decidir mejor.";
+  testimonialStatus.classList.add("success");
+
+  await submitToSheets({
+    tipo: "testimonio",
+    nombre: testimonial.name,
+    contexto: testimonial.context,
+    calificacion: String(testimonial.rating),
+    comentario: testimonial.comment,
+    consentimiento: "si",
+    estado: "Publicado",
+  });
+
+  testimonialForm.reset();
+});
+
+testimonialForm?.addEventListener("input", () => {
+  testimonialStatus?.classList.remove("success", "error");
+});
+
+renderTestimonials(getStoredTestimonials());
+loadTestimonialsFromSheets();
 syncWhatsappLinks();
