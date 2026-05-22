@@ -5,6 +5,24 @@ const SITE_CONFIG = {
   submitCooldownMs: 60000,
   testimonialsStorageKey: "tuplanfacil-testimonials",
   maxVisibleTestimonials: 12,
+  defaultTestimonials: [
+    {
+      id: "rescatado-20260522-153648",
+      name: "Mary",
+      context: "Cliente TuPlanFácil",
+      rating: 5,
+      comment:
+        "La asesoría de Ignacio fue buenísima, aclaró todas las dudas que tenía en todo momento y siempre con muy buena disposición. Full recomendado!",
+    },
+    {
+      id: "rescatado-20260522-153851",
+      name: "Felipe C.",
+      context: "Planes corporate",
+      rating: 5,
+      comment:
+        "Ignacio me ayudó a tomar la mejor decisión en cuanto a planes corporate, me guio a dejar de perder plata con mi antigua isapre y me ayudó a cambiarme a la isapre con la que mi empresa tiene convenio",
+    },
+  ],
 };
 
 const navToggle = document.querySelector("[data-nav-toggle]");
@@ -254,7 +272,7 @@ function loadTestimonialsFromSheets() {
 
   window[callbackName] = (payload) => {
     const remote = Array.isArray(payload) ? payload : payload.testimonials || [];
-    const merged = mergeTestimonials(remote, getStoredTestimonials());
+    const merged = mergeTestimonials(remote, getStoredTestimonials(), SITE_CONFIG.defaultTestimonials);
     renderTestimonials(merged);
     delete window[callbackName];
     script.remove();
@@ -417,7 +435,7 @@ testimonialForm?.addEventListener("submit", async (event) => {
   }
 
   const testimonial = buildTestimonial(formData);
-  const current = mergeTestimonials([testimonial], getStoredTestimonials());
+  const current = mergeTestimonials([testimonial], getStoredTestimonials(), SITE_CONFIG.defaultTestimonials);
   saveStoredTestimonials(current);
   renderTestimonials(current);
 
@@ -441,6 +459,6 @@ testimonialForm?.addEventListener("input", () => {
   testimonialStatus?.classList.remove("success", "error");
 });
 
-renderTestimonials(getStoredTestimonials());
+renderTestimonials(mergeTestimonials(getStoredTestimonials(), SITE_CONFIG.defaultTestimonials));
 loadTestimonialsFromSheets();
 syncWhatsappLinks();
