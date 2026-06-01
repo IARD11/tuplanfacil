@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>¡Gracias! — TuPlanFácil</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" href="assets/images/tiburon-nuevo.png" />
+
+    <!-- Google Ads conversion tracking — reemplaza los valores cuando tengas el ID -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-XXXXXXXXX');
+      gtag('event', 'conversion', { 'send_to': 'AW-XXXXXXXXX/YYYYYYYYYYY' });
+    </script>
+    -->
+
+    <style>
+      :root {
+        --azul-profundo: #0B3A75;
+        --azul:          #006DCC;
+        --celeste:       #36C5F0;
+        --celeste-claro: #EAF8FF;
+        --blanco:        #FFFFFF;
+        --gris-texto:    #334155;
+        --gris-suave:    #64748B;
+        --gris-fondo:    #F8FAFC;
+        --linea:         #DCEAF7;
+        --verde-wa:      #25D366;
+        --verde-oscuro:  #0B6B3A;
+        --radio:         8px;
+        --radio-lg:      18px;
+        --sombra:        0 22px 60px rgba(11,58,117,0.12);
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        background: var(--gris-fondo);
+        color: var(--gris-texto);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      a { color: inherit; text-decoration: none; }
+      img { display: block; max-width: 100%; }
+
+      /* ── Header ── */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 74px;
+        padding: 12px max(16px, calc((100vw - 1160px) / 2));
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(18px);
+        border-bottom: 1px solid rgba(220,234,247,0.86);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand-mark {
+        width: 52px;
+        height: 52px;
+        object-fit: contain;
+      }
+
+      .brand-name {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--azul-profundo);
+      }
+
+      .brand-tagline {
+        display: block;
+        font-size: 0.74rem;
+        font-weight: 600;
+        color: var(--gris-suave);
+      }
+
+      /* ── Main ── */
+      main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 16px 80px;
+      }
+
+      .card {
+        background: var(--blanco);
+        border: 1px solid var(--linea);
+        border-radius: var(--radio-lg);
+        box-shadow: var(--sombra);
+        max-width: 660px;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      /* ── Hero de la card ── */
+      .card-hero {
+        background:
+          radial-gradient(circle at 80% 20%, rgba(54,197,240,0.22), transparent 42%),
+          linear-gradient(145deg, #0B3A75 0%, #006DCC 100%);
+        padding: 48px 40px 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+        text-align: center;
+        color: var(--blanco);
+      }
+
+      .mascot {
+        width: 140px;
+        height: 140px;
+        object-fit: contain;
+        filter: drop-shadow(0 16px 28px rgba(0,0,0,0.30));
+        animation: float 3.5s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(-10px); }
+      }
+
+      .check-badge {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: var(--verde-wa);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 0 10px rgba(37,211,102,0.18), 0 10px 24px rgba(37,211,102,0.32);
+        animation: pop 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+      }
+
+      @keyframes pop {
+        from { transform: scale(0); opacity: 0; }
+        to   { transform: scale(1); opacity: 1; }
+      }
+
+      .check-badge svg {
+        width: 32px;
+        height: 32px;
+        stroke: #fff;
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        animation: draw 0.45s 0.3s ease forwards;
+      }
+
+      @keyframes draw { to { stroke-dashoffset: 0; } }
+
+      .card-hero h1 {
+        font-size: clamp(1.45rem, 4vw, 1.9rem);
+        font-weight: 800;
+        color: var(--blanco);
+        line-height: 1.1;
+      }
+
+      .card-hero p {
+        font-size: 1rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.82);
+        max-width: 420px;
+      }
+
+      /* ── Body ── */
+      .card-body {
+        padding: 36px 40px 40px;
+      }
+
+      .steps-label {
+        font-size: 0.74rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--azul);
+        margin-bottom: 18px;
+      }
+
+      .steps {
+        list-style: none;
+        display: grid;
+        gap: 12px;
+        margin-bottom: 32px;
+      }
+
+      .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 16px 18px;
+        border: 1px solid var(--linea);
+        border-radius: var(--radio-lg);
+        background: var(--celeste-claro);
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+
+      .step:hover {
+        transform: translateX(4px);
+        box-shadow: 0 6px 20px rgba(11,58,117,0.09);
+      }
+
+      .step-num {
+        flex: 0 0 auto;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--azul-profundo), var(--azul));
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 14px rgba(0,109,204,0.22);
+      }
+
+      .step-copy strong {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: var(--azul-profundo);
+        margin-bottom: 2px;
+      }
+
+      .step-copy span {
+        font-size: 0.86rem;
+        color: var(--gris-suave);
+        font-weight: 500;
+      }
+
+      /* ── CTAs ── */
+      .actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .btn-wa {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        min-height: 52px;
+        border-radius: var(--radio-lg);
+        background: var(--verde-wa);
+        color: #064a2c;
+        font-family: inherit;
+        font-weight: 800;
+        font-size: 1rem;
+        cursor: pointer;
+        border: 0;
+        box-shadow: 0 12px 28px rgba(37,211,102,0.28);
+        transition: transform 160ms ease, background 160ms ease;
+        text-decoration: none;
+      }
+
+      .btn-wa:hover { background: #22c55e; transform: translateY(-2px); }
+
+      .btn-wa svg {
+        width: 22px;
+        height: 22px;
+        fill: currentColor;
+        flex: 0 0 auto;
+      }
+
+      .back-link {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: var(--gris-suave);
+        transition: color 160ms ease;
+      }
+
+      .back-link:hover { color: var(--azul); }
+
+      /* ── Footer ── */
+      footer {
+        text-align: center;
+        padding: 18px 16px;
+        font-size: 0.8rem;
+        color: var(--gris-suave);
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 540px) {
+        .card-hero  { padding: 36px 20px 30px; }
+        .card-body  { padding: 28px 20px 32px; }
+        .mascot     { width: 110px; height: 110px; }
+        .card-hero h1 { font-size: 1.35rem; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .mascot     { animation: none; }
+        .check-badge { animation: none; }
+        .check-badge svg { stroke-dashoffset: 0; animation: none; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="header">
+      <a class="brand" href="index.html" aria-label="Volver al inicio">
+        <img class="brand-mark" src="assets/images/tiburon-nuevo.png" alt="" />
+        <span>
+          <strong class="brand-name">TuPlanFácil</strong>
+          <small class="brand-tagline">Tu plan de salud, más fácil</small>
+        </span>
+      </a>
+    </header>
+
+    <main>
+      <div class="card">
+        <div class="card-hero">
+          <img class="mascot" src="assets/images/tiburon-nuevo.png" alt="Tiburón asesor TuPlanFácil" />
+
+          <div class="check-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" /></svg>
+          </div>
+
+          <h1>¡Gracias, tu solicitud fue enviada!</h1>
+          <p>Recibimos tus datos. Nuestro equipo los revisará y te contactará por WhatsApp en menos de 24 horas.</p>
+        </div>
+
+        <div class="card-body">
+          <p class="steps-label">¿Qué pasa ahora?</p>
+
+          <ol class="steps">
+            <li class="step">
+              <span class="step-num">1</span>
+              <div class="step-copy">
+                <strong>Revisamos tu perfil</strong>
+                <span>Analizamos tu renta, Isapre actual, cargas y región para orientarte con criterio real.</span>
+              </div>
+            </li>
+            <li class="step">
+              <span class="step-num">2</span>
+              <div class="step-copy">
+                <strong>Te contactamos por WhatsApp</strong>
+                <span>Un asesor del equipo TuPlanFácil se comunicará contigo directamente.</span>
+              </div>
+            </li>
+            <li class="step">
+              <span class="step-num">3</span>
+              <div class="step-copy">
+                <strong>Orientación clara y sin presiones</strong>
+                <span>Te explicamos tus opciones reales según tu caso, sin compromisos ni letra chica.</span>
+              </div>
+            </li>
+          </ol>
+
+          <div class="actions">
+            <a class="btn-wa" id="waBtn" href="#" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Escribir por WhatsApp ahora
+            </a>
+            <a class="back-link" href="index.html">← Volver al inicio</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>© 2025 TuPlanFácil · Asesoría referencial, sujeta a evaluación individual y normativa vigente.</footer>
+
+    <script>
+      const WA_NUMBER = "56942544093";
+      const WA_MSG = "Hola, acabo de enviar mi solicitud en TuPlanFácil. Quedo atento a tu orientación.";
+      document.getElementById("waBtn").href =
+        `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MSG)}`;
+    </script>
+  </body>
+</html>

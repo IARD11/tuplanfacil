@@ -485,11 +485,7 @@ leadForm?.addEventListener("submit", async (event) => {
   }
 
   window.open(whatsappUrl(buildLeadSummary(formData)), "_blank", "noopener");
-
-  formStatus.textContent = "¡Gracias! Recibimos tus datos y te contactaremos pronto para revisar tu caso.";
-  formStatus.classList.add("success");
-
-  leadForm.reset();
+  window.location.href = "gracias.html";
 
   if (submitBtn) {
     submitBtn.disabled = false;
