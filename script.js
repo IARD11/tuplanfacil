@@ -484,13 +484,25 @@ leadForm?.addEventListener("submit", async (event) => {
     console.warn("No se pudo guardar el lead en Supabase:", err);
   }
 
+  try {
+    sessionStorage.setItem("tuplanfacil_lead_submitted", "1");
+  } catch (_) {
+    // Algunos navegadores pueden bloquear sessionStorage; la página de gracias igual registrará page_view.
+  }
+
   window.open(whatsappUrl(buildLeadSummary(formData)), "_blank", "noopener");
-  window.location.href = "gracias.html";
+
+  formStatus.textContent = "¡Gracias! Recibimos tus datos y te contactaremos pronto para revisar tu caso.";
+  formStatus.classList.add("success");
+
+  leadForm.reset();
 
   if (submitBtn) {
     submitBtn.disabled = false;
     submitBtn.textContent = "Enviar solicitud";
   }
+
+  setTimeout(() => { window.location.href = "gracias.html"; }, 1000);
 });
 
 leadForm?.addEventListener("input", () => {

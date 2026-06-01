@@ -7,17 +7,29 @@
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" type="image/png" href="assets/images/tiburon-nuevo.png" />
 
-    <!-- Google Ads conversion tracking — reemplaza los valores cuando tengas el ID -->
-    <!--
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXX"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4R7L0RT7M1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'AW-XXXXXXXXX');
-      gtag('event', 'conversion', { 'send_to': 'AW-XXXXXXXXX/YYYYYYYYYYY' });
+      gtag('config', 'G-4R7L0RT7M1', {
+        page_title: 'Gracias - TuPlanFácil',
+        page_path: '/gracias.html'
+      });
+
+      try {
+        if (sessionStorage.getItem('tuplanfacil_lead_submitted') === '1') {
+          gtag('event', 'generate_lead', {
+            event_category: 'lead',
+            event_label: 'formulario_cotizacion'
+          });
+          sessionStorage.removeItem('tuplanfacil_lead_submitted');
+        }
+      } catch (_) {
+        // Si el navegador bloquea sessionStorage, mantenemos al menos el page_view de GA4.
+      }
     </script>
-    -->
+    <!-- Google Ads conversion tracking: agregar aquí AW-ID/LABEL cuando creemos la conversión en Google Ads. -->
 
     <style>
       :root {
