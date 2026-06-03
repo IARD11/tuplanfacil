@@ -490,13 +490,6 @@ leadForm?.addEventListener("submit", async (event) => {
     // Algunos navegadores pueden bloquear sessionStorage; la página de gracias igual registrará page_view.
   }
 
-  if (typeof gtag === "function") {
-    gtag("event", "generate_lead", {
-      event_category: "formulario",
-      event_label: "lead_isapre",
-    });
-  }
-
   window.open(whatsappUrl(buildLeadSummary(formData)), "_blank", "noopener");
 
   formStatus.textContent = "¡Gracias! Recibimos tus datos y te contactaremos pronto para revisar tu caso.";
