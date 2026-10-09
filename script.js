@@ -105,12 +105,14 @@ function validateForm(formData) {
   let valid = true;
   const email = getValue(formData, "email");
 
-  if (!getValue(formData, "nombre")) {
+  // Mismas reglas que la policy RLS de Supabase (nombre >= 2, teléfono 6-30 caracteres)
+  if (getValue(formData, "nombre").length < 2) {
     setError("nombre", "Ingresa tu nombre completo.");
     valid = false;
   }
-  if (!getValue(formData, "telefono")) {
-    setError("telefono", "Ingresa tu teléfono o WhatsApp.");
+  const telefono = getValue(formData, "telefono");
+  if (telefono.replace(/\D/g, "").length < 8 || telefono.length > 30) {
+    setError("telefono", "Ingresa un teléfono válido (ej: +56 9 1234 5678).");
     valid = false;
   }
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -480,8 +482,18 @@ leadForm?.addEventListener("submit", async (event) => {
   try {
     await submitLeadToSupabase(formData);
   } catch (err) {
-    // WhatsApp sigue siendo la conversión principal; registramos el error sin bloquear al usuario.
+    // No mostrar "Gracias" si el lead no quedó guardado: el usuario debe saberlo y poder reintentar.
     console.warn("No se pudo guardar el lead en Supabase:", err);
+    lastSubmitTime = 0;
+    window.open(whatsappUrl(buildLeadSummary(formData)), "_blank", "noopener");
+    formStatus.textContent =
+      "No pudimos registrar tu solicitud. Envíanos el mensaje por WhatsApp o vuelve a intentarlo.";
+    formStatus.classList.add("error");
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Enviar solicitud";
+    }
+    return;
   }
 
   try {
